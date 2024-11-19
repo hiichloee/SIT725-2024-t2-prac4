@@ -8,7 +8,7 @@ const port = 3000;
 const calculationModel = require('./models/calculation');
 
 app.engine("html",ejs.__express)
-app.set("view engine","html")
+app.set("view engine","html") 
 
 app.use(express.static('public'))
 app.set('views', path.join(__dirname, 'public'));
