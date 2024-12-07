@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <link rel="stylesheet" href="/css/materialize.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align teal-text">Calculation History</h1>
+        <table class="highlight centered">
+            <thead>
+                <tr>
+                    <th>Num1</th>
+                    <th>Num2</th>
+                    <th>Sum</th>
+                    <th>Create Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%for(var i=0;i<calculations.length;i++){%>
+                    <tr>
+                        <td><%= calculations[i].num1 %></td>
+                        <td><%= calculations[i].num2 %></td>
+                        <td><%= calculations[i].sum %></td>
+                        <td><%= calculations[i].createdAt.toLocaleString() %></td>
+                    </tr>
+                <%}%>
+            </tbody>
+        </table>
+        <div class="center-align" style="margin-top: 20px;">
+            <a href="/" class="waves-effect waves-light btn teal lighten-1">Go Back</a>
+            <form action="/history/delete" method="POST" style="display:inline;">
+                <button type="submit" class="waves-effect waves-light btn red darken-1">Delete All</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
