@@ -13,11 +13,11 @@ exports.addNumbers = async (req, res) => {
     console.log("num1:", num1);
     console.log("num2:", num2);
 
-    if (!num1 || !num2) {
-        return res.status(400).send('Please provide two numbers!');
+    if (!num1 || !num2 || isNaN(num1) || isNaN(num2)) {
+        return res.status(400).json({ result: null, statusCode: 400, message: 'Please provide two numbers!' });
     }
 
-    const sum = parseInt(num1) + parseInt(num2) || null;
+    const sum = parseInt(num1) + parseInt(num2);
     console.log("sum:", sum);
 
     const calculation = new calculationModel({
@@ -26,18 +26,14 @@ exports.addNumbers = async (req, res) => {
         sum: sum
     });
 
-    if (isNaN(num1) || isNaN(num2)) {
-        return res.status(400).json({ result: null, statusCode: 400 });
-    }
-
     try {
         await calculation.save();
         console.log('Calculation saved to MongoDB:', calculation);
-        res.json({ result: sum, statusCode: 200 }).status(200);
+        res.status(200).json({ result: sum, statusCode: 200 });
         res.render('result', { num1, num2, sum });
     } catch (err) {
         console.error('Error saving calculation:', err);
-        res.status(500).send('Error saving calculation to the database.');
+        res.status(500).json({ result: null, statusCode: 500, message: 'Error saving calculation to the database.' });
     }
 };
 
