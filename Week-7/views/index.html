@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task7.2</title>
+    <link rel="stylesheet" href="/css/materialize.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align">Please input two numbers!</h1>
+        <p>Num1:
+            <input type="number" id="num1">
+        </p>
+        <p>Num2:
+            <input type="number" id="num2">
+        </p>
+        <a class="waves-effect waves-light btn" onclick="add()">Submit</a>
+        <a class="waves-effect waves-light btn yellow darken-1" href="/history">View History</a>
+
+        <br>
+        <br>
+
+        <div class="center-align">
+            <button class="waves-effect waves-light red btn" onclick="sendMessage()">Send A Message</button>
+        </div>
+        
+        <div id="random-number" class="center-align">
+            <h2>Random Number:</h2>
+            <strong><p id="Num"></p></strong>
+        </div>
+        
+    </div>
+</body>
+<script src="/js/materialize.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    function add(){
+        const num1 = document.getElementById('num1').value;
+        const num2 = document.getElementById('num2').value;
+
+        // Send numbers to the server via WebSocket
+        socket.emit('addNumbers', { num1, num2 });
+
+        // Listen for the calculation result
+        socket.on('calculationResult', (data) => {
+            alert(`The result is: ${data.result}`);
+        });
+
+        const url = `/add?num1=${num1}&num2=${num2}`;
+        window.location.href = url;
+    }
+
+
+    const socket = io();
+    
+    socket.on('num', (msg) => {
+        document.getElementById('Num').innerText = msg;
+        console.log('Random number: ' + msg);
+    });
+
+    function sendMessage() {
+        const msg = "Hello, server!";
+        socket.emit('message', { content: msg });
+        console.log('Message sent to server:', msg);
+    }
+
+    socket.on('response', (data) => {
+        console.log('Server response:', data.message);
+        alert('Server says: ' + data.message);
+    });
+
+
+
+</script>
+</html>
